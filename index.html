@@ -18,20 +18,25 @@ img{
 }
 .search{
   width: 80vw;
+  height: 8vh;
+}
+h1{
+  color: white;
+  font-size: 40px;
 }
 </style>
 <body>
 
   <div class="w3-display-middle over">
 
-
+      <h1 class="w3-center w3-bold">Product Scanner</h1>
       <input type="text" class=" w3-no-shadow w3-padding search" placeholder="Enter Product Number" name="search">
       <br>
       <input class="chooseFile w3-margin-top" type="file" capture="camera" accept="image/*">
 
 
       <div class="w3-margin-top w3-padding w3-center">
-        <button class=" button2 w3-button w3-white w3-round w3-padding-top" onclick="myFunction()">Search</button>
+        <button class=" button2 w3-button w3-white w3-round w3-padding-top" onclick="myFunction()">Add</button>
 
         <button class=" button2 w3-button w3-white w3-round w3-padding" onclick="myFunction()">Missing</button>
       </div>
