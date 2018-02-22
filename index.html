@@ -27,6 +27,11 @@ h1{
   font-size: 40px;
 }
 </style>
+<head>
+	<title>Agaci Barcode Scanner</title>
+	<script type="text/javascript" src="DBRResources/dynamsoft.barcodereader.config.js"></script>
+	<script type="text/javascript" src="DBRResources/dynamsoft.barcodereader.initiate.js"></script>
+</head>
 <body>
 
   <div class="w3-display-middle over">
@@ -34,22 +39,47 @@ h1{
       <h1 class="w3-center w3-bold">Product Scanner</h1>
       <input type="text" class=" w3-no-shadow w3-padding search" placeholder="Enter Product Number" name="search">
       <br>
-      <input class="chooseFile w3-margin-top" type="file" capture="camera" accept="image/*">
+      <input id="barcode" class="w3-margin-top" type="file" onchange="encodeImageFileAsURL(this)" capture="camera" accept="image/*">
 
 
       <div class="w3-margin-top w3-padding w3-center">
-        <button class=" button2 w3-button w3-white w3-round w3-padding-top" onclick="myFunction()">Add</button>
+        <button class=" button2 w3-button w3-white w3-round w3-padding-top" onclick="ReadBarcode();">Add</button>
 
         <button class=" button2 w3-button w3-white w3-round w3-padding" onclick="myFunction()">Missing</button>
       </div>
    </div>
 
-
-
-<script>
-function myFunction() {
-    <input type="file" accept="image/*">
+<script type="text/javascript">
+	var number; 
+	function encodeImageFileAsURL(element) {
+  var file = element.files[0];
+  var reader = new FileReader();
+  reader.onloadend = function() {
+    console.log('RESULT', reader.result);
+	number = reader.result;
+  }
+  reader.readAsDataURL(file);
 }
-</script>
+
+		dynamsoft.dbrEnv.resourcesPath = "../../DBRResources";
+		var dbrObject; 
+		function onDBRInitSuccess(){
+			dbrObject=new dynamsoft.dbrEnv.BarcodeReader();document.getElementById("btn-readBarcode").disabled=false;
+		}
+		function onDBRInitFailure(e,a){
+			alert("Init failed: "+a);
+		}
+		function ReadBarcode(){
+			if(!dbrObject)return; var base64img= number.split(',')[1];
+			//document.getElementById("barcode").src.split(',')[1];
+			var result=dbrObject.readBase64(base64img); 
+			if(result.getCount()>0){
+				var strMsg = 'Barcode Type: ' + result.get(0).formatString + '\n';strMsg += 'Barcode Value: ' + result.get(0).text;alert(strMsg);
+			}else{
+				alert('No Barcode(s) found.');
+			}
+		}
+		dynamsoft.dbrEnv.init(onDBRInitSuccess,onDBRInitFailure);
+	</script>
 </body>
 </html>
